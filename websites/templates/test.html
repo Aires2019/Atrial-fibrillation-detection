@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Echarts实现心电图效果</title>
+    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.js"></script>
+</head>
+<body>
+<div id="totalFlowRate" style="height:300px;width: 50%"></div>
+</body>
+</html>
+<script type="text/javascript">
+    var totalFlowRate = echarts.init(document.getElementById('totalFlowRate'));
+    var xAxisData=[];
+    var yAxisData=[];
+    for(var i=100 ;i>0;i--){
+        xAxisData.push(i+"秒前");
+    }
+    for(i=1;i<101;i++){
+        yAxisData.push(Math.round(Math.random()*10));
+    }
+    var totalFlowRateOption = {
+        animation:false,
+        title: {
+            text: '总流量（kbps）'/*,
+             left:"110px"*/
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross'
+            }
+        },
+        grid: {
+            left: 50/*"50px"*/,
+            right: 15/*"15px"*/
+        },
+        legend: {
+            data:['当前流量']
+        },
+        xAxis: {
+            boundaryGap: false,
+            data: xAxisData,
+            show:false,
+        },
+        yAxis: {
+            boundaryGap:false,
+        },
+        series: {
+            symbol:"none",/*去掉小圆点*/
+            name: '当前流量',
+            type: 'line',
+            smooth:true,
+            itemStyle : {
+                normal : {
+                    lineStyle:{
+                        width:2,//折线宽度
+                        color:"#FF0000"//折线颜色
+                    }
+                }
+            },
+            data: yAxisData/*,
+             smooth:true//0-1之间的数字或true或false，显示为平滑的曲线*/
+        }
+    };
+    totalFlowRate.setOption(totalFlowRateOption);
+    setInterval(function(){
+        yAxisData.push(Math.round(Math.random()*10));
+        yAxisData.shift();
+        totalFlowRate.setOption(totalFlowRateOption);
+    },100);
+    /*setInterval(function(){
+        yAxisData.push(Math.round(Math.random()*1000));
+        yAxisData.shift();
+        var myselfOption = totalFlowRate.getOption();
+        myselfOption.series[0].data=yAxisData;
+        totalFlowRate.setOption(myselfOption);
+    },100);*/
+</script>
